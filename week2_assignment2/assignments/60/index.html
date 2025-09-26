@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Accessible Drag-and-Drop Interface</title>
+    <style>
+        .container {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        .dropzone, .draggable {
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 16px;
+            min-width: 120px;
+            min-height: 60px;
+            background: #f9f9f9;
+            margin-bottom: 10px;
+        }
+        .dropzone {
+            background: #e3f2fd;
+        }
+        .dropzone[aria-dropeffect="move"] {
+            outline: 3px solid #1976d2;
+        }
+        .draggable[aria-grabbed="true"] {
+            background: #bbdefb;
+            outline: 2px dashed #1976d2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Accessible Drag-and-Drop Interface</h1>
+    <div class="container">
+        <div id="draggables" aria-label="Draggable Items" role="list">
+            <div class="draggable" tabindex="0" draggable="true" role="listitem"
+                     aria-grabbed="false" id="item1">Item 1</div>
+            <div class="draggable" tabindex="0" draggable="true" role="listitem"
+                     aria-grabbed="false" id="item2">Item 2</div>
+            <div class="draggable" tabindex="0" draggable="true" role="listitem"
+                     aria-grabbed="false" id="item3">Item 3</div>
+        </div>
+        <div id="dropzone" class="dropzone" tabindex="0" role="list"
+                 aria-label="Drop Zone" aria-dropeffect="none">
+            Drop items here
+        </div>
+    </div>
+    <script>
+        const draggables = document.querySelectorAll('.draggable');
+        const dropzone = document.getElementById('dropzone');
+        let dragged = null;
+
+        draggables.forEach(item => {
+            item.addEventListener('dragstart', e => {
+                dragged = item;
+                item.setAttribute('aria-grabbed', 'true');
+                dropzone.setAttribute('aria-dropeffect', 'move');
+                e.dataTransfer.setData('text/plain', item.id);
+            });
+
+            item.addEventListener('dragend', () => {
+                item.setAttribute('aria-grabbed', 'false');
+                dropzone.setAttribute('aria-dropeffect', 'none');
+                dragged = null;
+            });
+
+            // Keyboard accessibility: Space/Enter to "grab"
+            item.addEventListener('keydown', e => {
+                if ((e.key === ' ' || e.key === 'Enter') && !dragged) {
+                    e.preventDefault();
+                    dragged = item;
+                    item.setAttribute('aria-grabbed', 'true');
+                    dropzone.setAttribute('aria-dropeffect', 'move');
+                    dropzone.focus();
+                }
+            });
+        });
+
+        dropzone.addEventListener('dragover', e => {
+            e.preventDefault();
+            dropzone.setAttribute('aria-dropeffect', 'move');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.setAttribute('aria-dropeffect', 'none');
+        });
+
+        dropzone.addEventListener('drop', e => {
+            e.preventDefault();
+            const id = e.dataTransfer.getData('text/plain');
+            const item = document.getElementById(id);
+            if (item) {
+                dropzone.appendChild(item);
+                item.setAttribute('aria-grabbed', 'false');
+                dropzone.setAttribute('aria-dropeffect', 'none');
+                item.focus();
+            }
+            dragged = null;
+        });
+
+        // Keyboard accessibility: Space/Enter to "drop"
+        dropzone.addEventListener('keydown', e => {
+            if ((e.key === ' ' || e.key === 'Enter') && dragged) {
+                e.preventDefault();
+                dropzone.appendChild(dragged);
+                dragged.setAttribute('aria-grabbed', 'false');
+                dropzone.setAttribute('aria-dropeffect', 'none');
+                dragged.focus();
+                dragged = null;
+            }
+        });
+    </script>
+</body>
+</html>

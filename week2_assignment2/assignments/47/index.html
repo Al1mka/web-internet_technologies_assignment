@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive SVG Graphics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        /* SVG Animation Styles */
+        .interactive-element {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .interactive-element:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Pulse animation for active elements */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Rotate animation */
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .rotate {
+            animation: rotate 3s linear infinite;
+            transform-origin: center;
+        }
+        
+        /* Bounce animation */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        
+        /* Glow effect */
+        .glow {
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        /* Interactive dashboard styles */
+        .dashboard-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .control-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Color picker styles */
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            border: 3px solid transparent;
+        }
+        
+        .color-option:hover {
+            transform: scale(1.1);
+            border-color: white;
+        }
+        
+        .color-option.active {
+            border-color: #fbbf24;
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-white mb-4">Interactive SVG Graphics</h1>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                Explore interactive SVG elements with hover effects, click animations, and dynamic color changes.
+            </p>
+        </div>
+
+        <!-- Main Interactive Dashboard -->
+        <div class="dashboard-card rounded-2xl p-8 mb-12 shadow-2xl">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Interactive City Scene -->
+                <div class="lg:col-span-2">
+                    <h2 class="text-2xl font-bold text-white mb-6">🏙️ Interactive City Scene</h2>
+                    <div class="bg-white bg-opacity-10 rounded-xl p-6">
+                        <svg viewBox="0 0 800 400" class="w-full h-auto" id="cityScene">
+                            <!-- Sky gradient -->
+                            <defs>
+                                <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#87CEEB;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#E0F6FF;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="sunGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#FFA500;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="buildingGradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#2E5C8A;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="buildingGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#E74C3C;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#C0392B;stop-opacity:1" />
+                                </linearGradient>
+                                <linearGradient id="buildingGradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#2ECC71;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#27AE60;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Sky background -->
+                            <rect width="800" height="300" fill="url(#skyGradient)" />
+                            
+                            <!-- Sun -->
+                            <circle cx="650" cy="80" r="40" fill="url(#sunGradient)" class="interactive-element sun" id="sun">
+                                <title>Click me to change time of day!</title>
+                            </circle>
+                            
+                            <!-- Clouds -->
+                            <g class="cloud interactive-element" id="cloud1" transform="translate(100, 60)">
+                                <ellipse cx="0" cy="0" rx="30" ry="20" fill="white" opacity="0.8"/>
+                                <ellipse cx="25" cy="0" rx="35" ry="25" fill="white" opacity="0.8"/>
+                                <ellipse cx="50" cy="0" rx="30" ry="20" fill="white" opacity="0.8"/>
+                                <title>Floating cloud - hover to see it glow!</title>
+                            </g>
+                            
+                            <g class="cloud interactive-element" id="cloud2" transform="translate(300, 40)">
+                                <ellipse cx="0" cy="0" rx="25" ry="15" fill="white" opacity="0.7"/>
+                                <ellipse cx="20" cy="0" rx="30" ry="20" fill="white" opacity="0.7"/>
+                                <ellipse cx="40" cy="0" rx="25" ry="15" fill="white" opacity="0.7"/>
+                                <title>Another cloud to interact with!</title>
+                            </g>
+                            
+                            <!-- Buildings -->
+                            <rect x="50" y="200" width="80" height="200" fill="url(#buildingGradient1)" class="interactive-element building" id="building1">
+                                <title>Office Building - Click to light up windows!</title>
+                            </rect>
+                            
+                            <rect x="150" y="150" width="100" height="250" fill="url(#buildingGradient2)" class="interactive-element building" id="building2">
+                                <title>Apartment Complex - Click to light up windows!</title>
+                            </rect>
+                            
+                            <rect x="270" y="180" width="90" height="220" fill="url(#buildingGradient3)" class="interactive-element building" id="building3">
+                                <title>Green Building - Click to light up windows!</title>
+                            </rect>
+                            
+                            <rect x="380" y="160" width="110" height="240" fill="url(#buildingGradient1)" class="interactive-element building" id="building4">
+                                <title>Corporate Tower - Click to light up windows!</title>
+                            </rect>
+                            
+                            <rect x="510" y="190" width="85" height="210" fill="url(#buildingGradient2)" class="interactive-element building" id="building5">
+                                <title>Residential Building - Click to light up windows!</title>
+                            </rect>
+                            
+                            <!-- Windows (will be added dynamically) -->
+                            <g id="windows"></g>
+                            
+                            <!-- Ground -->
+                            <rect x="0" y="300" width="800" height="100" fill="#2C3E50" />
+                            
+                            <!-- Road -->
+                            <rect x="0" y="350" width="800" height="50" fill="#34495E" />
+                            <rect x="0" y="370" width="800" height="5" fill="#F1C40F" opacity="0.8" />
+                            
+                            <!-- Cars -->
+                            <g class="car interactive-element" id="car1" transform="translate(100, 360)">
+                                <rect x="0" y="0" width="60" height="25" rx="5" fill="#E74C3C"/>
+                                <rect x="10" y="-8" width="40" height="15" rx="3" fill="#3498DB"/>
+                                <circle cx="15" cy="25" r="8" fill="#2C3E50"/>
+                                <circle cx="45" cy="25" r="8" fill="#2C3E50"/>
+                                <title>Red car - Click to make it drive!</title>
+                            </g>
+                            
+                            <g class="car interactive-element" id="car2" transform="translate(300, 360)">
+                                <rect x="0" y="0" width="70" height="28" rx="5" fill="#2ECC71"/>
+                                <rect x="15" y="-10" width="40" height="18" rx="3" fill="#E8F8F5"/>
+                                <circle cx="18" cy="28" r="9" fill="#2C3E50"/>
+                                <circle cx="52" cy="28" r="9" fill="#2C3E50"/>
+                                <title>Green car - Click to make it drive!</title>
+                            </g>
+                            
+                            <!-- Trees -->
+                            <g class="tree interactive-element" id="tree1" transform="translate(600, 280)">
+                                <rect x="-5" y="0" width="10" height="40" fill="#8B4513"/>
+                                <circle cx="0" cy="-10" r="25" fill="#228B22"/>
+                                <title>Tree - Click to make it sway!</title>
+                            </g>
+                            
+                            <g class="tree interactive-element" id="tree2" transform="translate(720, 290)">
+                                <rect x="-4" y="0" width="8" height="35" fill="#8B4513"/>
+                                <circle cx="0" cy="-8" r="20" fill="#32CD32"/>
+                                <title>Another tree to interact with!</title>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Control Panel -->
+                <div class="control-panel rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-6">🎮 Interactive Controls</h3>
+                    
+                    <!-- Color Picker -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-white mb-3">Building Colors</h4>
+                        <div class="grid grid-cols-3 gap-3">
+                            <div class="color-option" style="background: linear-gradient(135deg, #4A90E2, #2E5C8A);" data-color="blue"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #E74C3C, #C0392B);" data-color="red"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #2ECC71, #27AE60);" data-color="green"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #F39C12, #E67E22);" data-color="orange"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #9B59B6, #8E44AD);" data-color="purple"></div>
+                            <div class="color-option" style="background: linear-gradient(135deg, #1ABC9C, #16A085);" data-color="teal"></div>
+                        </div>
+                    </div>
+
+                    <!-- Animation Controls -->
+                    <div class="mb-6">
+                        <h4 class="text-lg font-semibold text-white mb-3">Animations</h4>
+                        <div class="space-y-3">
+                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors" id="animateClouds">
+                                ☁️ Animate Clouds
+                            </button>
+                            <button class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg transition-colors" id="animateCars">
+                                🚗 Drive Cars
+                            </button>
+                            <button class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg transition-colors" id="toggleNight">
+                                🌙 Toggle Day/Night
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="bg-white bg-opacity-10 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-white mb-2">Interaction Stats</h4>
+                        <div class="text-sm text-gray-300 space-y-1">
+                            <div>Buildings clicked: <span id="buildingClicks" class="text-yellow-400 font-bold">0</span></div>
+                            <div>Cars driven: <span id="carClicks" class="text-yellow-400 font-bold">0</span></div>
+                            <div>Trees swayed: <span id="treeClicks" class="text-yellow-400 font-bold">0</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Shapes Gallery -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            <!-- Morphing Shape -->
+            <div class="bg-white bg-opacity-10 rounded-xl p-6 backdrop-blur-sm">
+                <h3 class="text-xl font-bold text-white mb-4">🔄 Morphing Shape</h3>
+                <svg viewBox="0 0 200 200" class="w-full h-auto">
+                    <path id="morphShape" d="M100,50 L150,100 L100,150 L50,100 Z" fill="#FF6B6B" class="interactive-element" style="transition: d 0.5s ease;">
+                        <title>Click to morph between shapes!</title>
+                    </path>
+                </svg>
+                <p class="text-gray-300 text-sm mt-2">Click the shape to see it transform!</p>
+            </div>
+
+            <!-- Color Wheel -->
+            <div class="bg-white bg-opacity-10 rounded-xl p-6 backdrop-blur-sm">
+                <h3 class="text-xl font-bold text-white mb-4">🎨 Color Wheel</h3>
+                <svg viewBox="0 0 200 200" class="w-full h-auto" id="colorWheel">
+                    <g transform="translate(100,100)">
+                        <circle r="80" fill="none" stroke="#ddd" stroke-width="2"/>
+                        <!-- Color segments will be added by JavaScript -->
+                    </g>
+                </svg>
+                <p class="text-gray-300 text-sm mt-2">Hover over segments to see colors!</p>
+            </div>
+
+            <!-- Interactive Chart -->
+            <div class="bg-white bg-opacity-10 rounded-xl p-6 backdrop-blur-sm">
+                <h3 class="text-xl font-bold text-white mb-4">📊 Interactive Chart</h3>
+                <svg viewBox="0 0 200 150" class="w-full h-auto" id="interactiveChart">
+                    <g transform="translate(20,20)">
+                        <!-- Chart bars will be added by JavaScript -->
+                    </g>
+                </svg>
+                <p class="text-gray-300 text-sm mt-2">Click bars to change their values!</p>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-white bg-opacity-10 rounded-xl p-8 backdrop-blur-sm">
+            <h2 class="text-2xl font-bold text-white mb-6">🎯 How to Interact</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-gray-300">
+                <div>
+                    <h3 class="font-semibold text-white mb-2">🏢 Buildings</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>• Hover to see building info</li>
+                        <li>• Click to light up windows</li>
+                        <li>• Use color picker to change colors</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-white mb-2">🚗 Vehicles & Nature</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>• Click cars to make them drive</li>
+                        <li>• Click trees to make them sway</li>
+                        <li>• Click sun to change time of day</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-white mb-2">🎮 Special Effects</h3>
+                    <ul class="text-sm space-y-1">
+                        <li>• Hover clouds for glow effect</li>
+                        <li>• Use control panel for animations</li>
+                        <li>• Watch the interaction counter</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class InteractiveSVG {
+            constructor() {
+                this.isNightMode = false;
+                this.buildingClicks = 0;
+                this.carClicks = 0;
+                this.treeClicks = 0;
+                this.morphShapeIndex = 0;
+                this.chartData = [30, 50, 80, 40, 70];
+                
+                this.init();
+            }
+
+            init() {
+                this.createWindows();
+                this.createColorWheel();
+                this.createChart();
+                this.bindEvents();
+                this.updateStats();
+            }
+
+            createWindows() {
+                const windowsGroup = document.getElementById('windows');
+                const buildings = [
+                    { x: 50, y: 200, width: 80, height: 200, rows: 8, cols: 4 },
+                    { x: 150, y: 150, width: 100, height: 250, rows: 10, cols: 5 },
+                    { x: 270, y: 180, width: 90, height: 220, rows: 9, cols: 4 },
+                    { x: 380, y: 160, width: 110, height: 240, rows: 10, cols: 5 },
+                    { x: 510, y: 190, width: 85, height: 210, rows: 8, cols: 4 }
+                ];
+
+                buildings.forEach((building, buildingIndex) => {
+                    const windowWidth = building.width / building.cols * 0.6;
+                    const windowHeight = building.height / building.rows * 0.4;
+                    
+                    for (let row = 0; row < building.rows; row++) {
+                        for (let col = 0; col < building.cols; col++) {
+                            const x = building.x + (col + 0.5) * (building.width / building.cols) - windowWidth / 2;
+                            const y = building.y + (row + 1) * (building.height / building.rows) - windowHeight / 2;
+                            
+                            const window = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                            window.setAttribute('x', x);
+                            window.setAttribute('y', y);
+                            window.setAttribute('width', windowWidth);
+                            window.setAttribute('height', windowHeight);
+                            window.setAttribute('fill', '#2C3E50');
+                            window.setAttribute('class', `window building-${buildingIndex + 1}`);
+                            window.style.transition = 'fill 0.3s ease';
+                            
+                            windowsGroup.appendChild(window);
+                        }
+                    }
+                });
+            }
+
+            createColorWheel() {
+                const colorWheel = document.getElementById('colorWheel').querySelector('g');
+                const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F'];
+                
+                colors.forEach((color, index) => {
+                    const angle = (index / colors.length) * 360;
+                    const segment = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    
+                    const startAngle = angle - 22.5;
+                    const endAngle = angle + 22.5;
+                    const startRad = (startAngle * Math.PI) / 180;
+                    const endRad = (endAngle * Math.PI) / 180;
+                    
+                    const x1 = 40 * Math.cos(startRad);
+                    const y1 = 40 * Math.sin(startRad);
+                    const x2 = 80 * Math.cos(startRad);
+                    const y2 = 80 * Math.sin(startRad);
+                    const x3 = 80 * Math.cos(endRad);
+                    const y3 = 80 * Math.sin(endRad);
+                    const x4 = 40 * Math.cos(endRad);
+                    const y4 = 40 * Math.sin(endRad);
+                    
+                    const pathData = `M ${x1} ${y1} L ${x2} ${y2} A 80 80 0 0 1 ${x3} ${y3} L ${x4} ${y4} A 40 40 0 0 0 ${x1} ${y1}`;
+                    
+                    segment.setAttribute('d', pathData);
+                    segment.setAttribute('fill', color);
+                    segment.setAttribute('class', 'interactive-element');
+                    segment.style.transition = 'transform 0.2s ease';
+                    
+                    segment.addEventListener('mouseenter', () => {
+                        segment.style.transform = 'scale(1.1)';
+                        this.showColorInfo(color, index);
+                    });
+                    
+                    segment.addEventListener('mouseleave', () => {
+                        segment.style.transform = 'scale(1)';
+                    });
+                    
+                    colorWheel.appendChild(segment);
+                });
+            }
+
+            createChart() {
+                const chart = document.getElementById('interactiveChart').querySelector('g');
+                const barWidth = 25;
+                const maxHeight = 100;
+                
+                this.chartData.forEach((value, index) => {
+                    const x = index * 35;
+                    const height = (value / 100) * maxHeight;
+                    const y = maxHeight - height;
+                    
+                    const bar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    bar.setAttribute('x', x);
+                    bar.setAttribute('y', y);
+                    bar.setAttribute('width', barWidth);
+                    bar.setAttribute('height', height);
+                    bar.setAttribute('fill', `hsl(${index * 60}, 70%, 60%)`);
+                    bar.setAttribute('class', 'interactive-element chart-bar');
+                    bar.setAttribute('data-index', index);
+                    bar.style.transition = 'all 0.3s ease';
+                    
+                    bar.addEventListener('click', () => this.updateChartBar(index));
+                    bar.addEventListener('mouseenter', () => {
+                        bar.style.transform = 'scaleY(1.1)';
+                        bar.style.transformOrigin = 'bottom';
+                    });
+                    bar.addEventListener('mouseleave', () => {
+                        bar.style.transform = 'scaleY(1)';
+                    });
+                    
+                    chart.appendChild(bar);
+                    
+                    // Add value label
+                    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    label.setAttribute('x', x + barWidth / 2);
+                    label.setAttribute('y', y - 5);
+                    label.setAttribute('text-anchor', 'middle');
+                    label.setAttribute('fill', 'white');
+                    label.setAttribute('font-size', '12');
+                    label.textContent = value;
+                    label.setAttribute('class', `chart-label-${index}`);
+                    
+                    chart.appendChild(label);
+                });
+            }
+
+            bindEvents() {
+                // Building interactions
+                document.querySelectorAll('.building').forEach((building, index) => {
+                    building.addEventListener('click', () => this.lightUpBuilding(index + 1));
+                    building.addEventListener('mouseenter', () => {
+                        building.style.filter = 'brightness(1.2)';
+                    });
+                    building.addEventListener('mouseleave', () => {
+                        building.style.filter = 'brightness(1)';
+                    });
+                });
+
+                // Car interactions
+                document.querySelectorAll('.car').forEach((car, index) => {
+                    car.addEventListener('click', () => this.driveCar(car, index + 1));
+                });
+
+                // Tree interactions
+                document.querySelectorAll('.tree').forEach((tree, index) => {
+                    tree.addEventListener('click', () => this.swayTree(tree, index + 1));
+                });
+
+                // Cloud interactions
+                document.querySelectorAll('.cloud').forEach(cloud => {
+                    cloud.addEventListener('mouseenter', () => {
+                        cloud.classList.add('glow');
+                        cloud.style.filter = 'drop-shadow(0 0 15px rgba(255,255,255,0.8))';
+                    });
+                    cloud.addEventListener('mouseleave', () => {
+                        cloud.classList.remove('glow');
+                        cloud.style.filter = 'none';
+                    });
+                });
+
+                // Sun interaction
+                document.getElementById('sun').addEventListener('click', () => this.toggleDayNight());
+
+                // Color picker
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.addEventListener('click', () => this.changeBuildingColors(option.dataset.color));
+                });
+
+                // Control buttons
+                document.getElementById('animateClouds').addEventListener('click', () => this.animateClouds());
+                document.getElementById('animateCars').addEventListener('click', () => this.animateAllCars());
+                document.getElementById('toggleNight').addEventListener('click', () => this.toggleDayNight());
+
+                // Morphing shape
+                document.getElementById('morphShape').addEventListener('click', () => this.morphShape());
+            }
+
+            lightUpBuilding(buildingNumber) {
+                const windows = document.querySelectorAll(`.building-${buildingNumber}`);
+                const isLit = windows[0].getAttribute('fill') === '#F1C40F';
+                
+                windows.forEach(window => {
+                    window.setAttribute('fill', isLit ? '#2C3E50' : '#F1C40F');
+                });
+                
+                if (!isLit) {
+                    this.buildingClicks++;
+                    this.updateStats();
+                }
+            }
+
+            driveCar(car, carNumber) {
+                car.style.transition = 'transform 2s ease-in-out';
+                const currentTransform = car.getAttribute('transform') || 'translate(0, 360)';
+                const currentX = parseInt(currentTransform.match(/translate\(([^,]+)/)[1]);
+                const newX = currentX + 200;
+                
+                car.setAttribute('transform', `translate(${newX}, 360)`);
+                
+                setTimeout(() => {
+                    car.setAttribute('transform', `translate(${currentX}, 360)`);
+                }, 2000);
+                
+                this.carClicks++;
+                this.updateStats();
+            }
+
+            swayTree(tree, treeNumber) {
+                tree.style.transition = 'transform 1s ease-in-out';
+                tree.style.transformOrigin = 'bottom center';
+                
+                const animations = [
+                    'rotate(10deg)',
+                    'rotate(-10deg)',
+                    'rotate(5deg)',
+                    'rotate(-5deg)',
+                    'rotate(0deg)'
+                ];
+                
+                let animationIndex = 0;
+                const animate = () => {
+                    if (animationIndex < animations.length) {
+                        tree.style.transform += ` ${animations[animationIndex]}`;
+                        animationIndex++;
+                        setTimeout(animate, 200);
+                    } else {
+                        tree.style.transform = tree.getAttribute('transform');
+                    }
+                };
+                
+                animate();
+                this.treeClicks++;
+                this.updateStats();
+            }
+
+            toggleDayNight() {
+                const sky = document.querySelector('rect[fill="url(#skyGradient)"]');
+                const sun = document.getElementById('sun');
+                
+                if (!this.isNightMode) {
+                    // Switch to night
+                    sky.setAttribute('fill', '#1a1a2e');
+                    sun.setAttribute('fill', '#f5f5dc');
+                    sun.setAttribute('r', '20');
+                    this.isNightMode = true;
+                } else {
+                    // Switch to day
+                    sky.setAttribute('fill', 'url(#skyGradient)');
+                    sun.setAttribute('fill', 'url(#sunGradient)');
+                    sun.setAttribute('r', '40');
+                    this.isNightMode = false;
+                }
+            }
+
+            changeBuildingColors(color) {
+                // Remove active class from all color options
+                document.querySelectorAll('.color-option').forEach(option => {
+                    option.classList.remove('active');
+                });
+                
+                // Add active class to clicked option
+                event.target.classList.add('active');
+                
+                const colorMap = {
+                    blue: 'url(#buildingGradient1)',
+                    red: 'url(#buildingGradient2)',
+                    green: 'url(#buildingGradient3)',
+                    orange: 'linear-gradient(to bottom, #F39C12, #E67E22)',
+                    purple: 'linear-gradient(to bottom, #9B59B6, #8E44AD)',
+                    teal: 'linear-gradient(to bottom, #1ABC9C, #16A085)'
+                };
+                
+                document.querySelectorAll('.building').forEach(building => {
+                    building.setAttribute('fill', colorMap[color] || colorMap.blue);
+                });
+            }
+
+            animateClouds() {
+                document.querySelectorAll('.cloud').forEach((cloud, index) => {
+                    cloud.style.transition = 'transform 3s ease-in-out';
+                    const currentTransform = cloud.getAttribute('transform');
+                    const match = currentTransform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+                    const currentX = parseInt(match[1]);
+                    const currentY = parseInt(match[2]);
+                    
+                    cloud.setAttribute('transform', `translate(${currentX + 100}, ${currentY})`);
+                    
+                    setTimeout(() => {
+                        cloud.setAttribute('transform', currentTransform);
+                    }, 3000);
+                });
+            }
+
+            animateAllCars() {
+                document.querySelectorAll('.car').forEach((car, index) => {
+                    setTimeout(() => this.driveCar(car, index + 1), index * 500);
+                });
+            }
+
+            morphShape() {
+                const shapes = [
+                    'M100,50 L150,100 L100,150 L50,100 Z', // Diamond
+                    'M100,50 A50,50 0 1,1 99,50 Z', // Circle
+                    'M50,50 L150,50 L150,150 L50,150 Z', // Square
+                    'M100,50 L130,90 L120,130 L80,130 L70,90 Z', // Pentagon
+                    'M100,50 L125,75 L150,100 L125,125 L100,150 L75,125 L50,100 L75,75 Z' // Octagon
+                ];
+                
+                const morphShape = document.getElementById('morphShape');
+                this.morphShapeIndex = (this.morphShapeIndex + 1) % shapes.length;
+                morphShape.setAttribute('d', shapes[this.morphShapeIndex]);
+                
+                // Change color too
+                const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7'];
+                morphShape.setAttribute('fill', colors[this.morphShapeIndex]);
+            }
+
+            updateChartBar(index) {
+                this.chartData[index] = Math.floor(Math.random() * 100) + 10;
+                const bar = document.querySelector(`[data-index="${index}"]`);
+                const label = document.querySelector(`.chart-label-${index}`);
+                
+                const maxHeight = 100;
+                const height = (this.chartData[index] / 100) * maxHeight;
+                const y = maxHeight - height;
+                
+                bar.setAttribute('y', y);
+                bar.setAttribute('height', height);
+                label.setAttribute('y', y - 5);
+                label.textContent = this.chartData[index];
+            }
+
+            showColorInfo(color, index) {
+                // You could add a tooltip or info display here
+                console.log(`Color: ${color}, Segment: ${index + 1}`);
+            }
+
+            updateStats() {
+                document.getElementById('buildingClicks').textContent = this.buildingClicks;
+                document.getElementById('carClicks').textContent = this.carClicks;
+                document.getElementById('treeClicks').textContent = this.treeClicks;
+            }
+        }
+
+        // Initialize the interactive SVG when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new InteractiveSVG();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984d686835ccb813',t:'MTc1ODgzMzU3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

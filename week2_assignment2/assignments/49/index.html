@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Loading Animation</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f0f0;
+            margin: 0;
+        }
+        .loader {
+            display: inline-block;
+            width: 64px;
+            height: 64px;
+            position: relative;
+        }
+        .loader div {
+            position: absolute;
+            top: 28px;
+            left: 28px;
+            width: 8px;
+            height: 8px;
+            background: #3498db;
+            border-radius: 50%;
+            animation: loader-animation 1.2s linear infinite;
+        }
+        .loader div:nth-child(1) { transform: rotate(0deg) translate(24px); animation-delay: 0s; }
+        .loader div:nth-child(2) { transform: rotate(45deg) translate(24px); animation-delay: -0.15s; }
+        .loader div:nth-child(3) { transform: rotate(90deg) translate(24px); animation-delay: -0.3s; }
+        .loader div:nth-child(4) { transform: rotate(135deg) translate(24px); animation-delay: -0.45s; }
+        .loader div:nth-child(5) { transform: rotate(180deg) translate(24px); animation-delay: -0.6s; }
+        .loader div:nth-child(6) { transform: rotate(225deg) translate(24px); animation-delay: -0.75s; }
+        .loader div:nth-child(7) { transform: rotate(270deg) translate(24px); animation-delay: -0.9s; }
+        .loader div:nth-child(8) { transform: rotate(315deg) translate(24px); animation-delay: -1.05s; }
+
+        @keyframes loader-animation {
+            0% { opacity: 1; }
+            100% { opacity: 0.1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Footer Layout</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        /* Sticky Footer Implementation using Flexbox */
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .main-content {
+            flex: 1;
+        }
+        
+        /* Alternative CSS Grid Implementation */
+        .grid-container {
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+        
+        /* Smooth transitions for content switching */
+        .content-section {
+            transition: all 0.3s ease;
+        }
+        
+        .content-section.hidden {
+            display: none;
+        }
+        
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Footer animation */
+        .footer {
+            transition: all 0.3s ease;
+        }
+        
+        .footer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Content fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Page Container with Flexbox Sticky Footer -->
+    <div class="page-container">
+        <!-- Header -->
+        <header class="bg-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-6">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold text-gray-900">Sticky Footer Demo</h1>
+                            <p class="text-sm text-gray-600">Perfect footer positioning in all scenarios</p>
+                        </div>
+                    </div>
+                    
+                    <nav class="hidden md:flex space-x-8">
+                        <a href="#" class="text-gray-700 hover:text-blue-600 transition-colors">Home</a>
+                        <a href="#" class="text-gray-700 hover:text-blue-600 transition-colors">About</a>
+                        <a href="#" class="text-gray-700 hover:text-blue-600 transition-colors">Services</a>
+                        <a href="#" class="text-gray-700 hover:text-blue-600 transition-colors">Contact</a>
+                    </nav>
+                    
+                    <button class="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area (Flexible) -->
+        <main class="main-content">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <!-- Content Type Selector -->
+                <div class="mb-12">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Test Different Content Heights</h2>
+                    <p class="text-lg text-gray-600 text-center mb-8">
+                        Switch between different content scenarios to see how the sticky footer behaves
+                    </p>
+                    
+                    <div class="flex flex-wrap justify-center gap-4 mb-8">
+                        <button class="content-btn bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors" data-content="short">
+                            📄 Short Content
+                        </button>
+                        <button class="content-btn bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors" data-content="medium">
+                            📝 Medium Content
+                        </button>
+                        <button class="content-btn bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors" data-content="long">
+                            📚 Long Content
+                        </button>
+                        <button class="content-btn bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors" data-content="empty">
+                            🗂️ Minimal Content
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content Sections -->
+                
+                <!-- Short Content -->
+                <div id="short-content" class="content-section fade-in">
+                    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Short Content Example</h3>
+                        <p class="text-gray-600 mb-6">
+                            This is a short content example. Even with minimal content, the footer will stick to the bottom of the viewport, ensuring your page always looks complete and professional.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="bg-blue-50 p-6 rounded-lg">
+                                <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mb-4">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Fast Loading</h4>
+                                <p class="text-sm text-gray-600">Quick and efficient page rendering</p>
+                            </div>
+                            
+                            <div class="bg-green-50 p-6 rounded-lg">
+                                <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Reliable</h4>
+                                <p class="text-sm text-gray-600">Consistent footer positioning</p>
+                            </div>
+                            
+                            <div class="bg-purple-50 p-6 rounded-lg">
+                                <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mb-4">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="font-semibold text-gray-900 mb-2">Responsive</h4>
+                                <p class="text-sm text-gray-600">Works on all device sizes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Content -->
+                <div id="medium-content" class="content-section hidden">
+                    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Medium Content Example</h3>
+                        
+                        <div class="prose max-w-none">
+                            <p class="text-gray-600 mb-6">
+                                This section demonstrates how the sticky footer behaves with medium-length content. The footer will remain at the bottom of the page, and if the content is longer than the viewport, users can scroll naturally while the footer stays in its proper position.
+                            </p>
+                            
+                            <h4 class="text-xl font-semibold text-gray-900 mb-4">Key Features of Sticky Footer Layout</h4>
+                            
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                                <div>
+                                    <h5 class="font-semibold text-gray-900 mb-3">Flexbox Implementation</h5>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Uses CSS Flexbox for reliable positioning
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Main content area grows to fill available space
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Footer automatically positions at bottom
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Works with any content height
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h5 class="font-semibold text-gray-900 mb-3">Browser Compatibility</h5>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Modern browsers (IE11+)
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Mobile devices and tablets
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Responsive design friendly
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-green-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            No JavaScript required
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                                <h5 class="font-semibold text-gray-900 mb-3">How It Works</h5>
+                                <p class="text-gray-600 mb-4">
+                                    The sticky footer layout uses a combination of CSS properties to ensure the footer always appears at the bottom of the page:
+                                </p>
+                                <ol class="list-decimal list-inside space-y-2 text-gray-600">
+                                    <li>The page container has <code class="bg-gray-200 px-2 py-1 rounded">min-height: 100vh</code> to fill the viewport</li>
+                                    <li>Flexbox with <code class="bg-gray-200 px-2 py-1 rounded">flex-direction: column</code> stacks elements vertically</li>
+                                    <li>The main content area has <code class="bg-gray-200 px-2 py-1 rounded">flex: 1</code> to grow and fill available space</li>
+                                    <li>The footer naturally positions at the bottom without additional CSS</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Long Content -->
+                <div id="long-content" class="content-section hidden">
+                    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Long Content Example</h3>
+                        
+                        <div class="prose max-w-none">
+                            <p class="text-gray-600 mb-6">
+                                This section contains extensive content to demonstrate how the sticky footer behaves when the content height exceeds the viewport height. You'll need to scroll to see all the content, and the footer will appear naturally at the end.
+                            </p>
+                            
+                            <h4 class="text-xl font-semibold text-gray-900 mb-4">Comprehensive Guide to Sticky Footer Layouts</h4>
+                            
+                            <div class="space-y-8">
+                                <section>
+                                    <h5 class="text-lg font-semibold text-gray-900 mb-3">1. Understanding the Problem</h5>
+                                    <p class="text-gray-600 mb-4">
+                                        Traditional web layouts often struggle with footer positioning. When content is short, the footer might appear in the middle of the page, leaving awkward white space below. When content is long, the footer should appear after all content, not floating in the middle of the viewport.
+                                    </p>
+                                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                                        <p class="text-yellow-800">
+                                            <strong>Common Issue:</strong> Footers that don't stick to the bottom create poor user experience and unprofessional appearance.
+                                        </p>
+                                    </div>
+                                </section>
+                                
+                                <section>
+                                    <h5 class="text-lg font-semibold text-gray-900 mb-3">2. CSS Flexbox Solution</h5>
+                                    <p class="text-gray-600 mb-4">
+                                        The modern approach uses CSS Flexbox to create a flexible layout that automatically adjusts to content height:
+                                    </p>
+                                    <div class="bg-gray-100 rounded-lg p-4 mb-4 font-mono text-sm">
+                                        <div class="text-gray-800">
+                                            .page-container {<br>
+                                            &nbsp;&nbsp;min-height: 100vh;<br>
+                                            &nbsp;&nbsp;display: flex;<br>
+                                            &nbsp;&nbsp;flex-direction: column;<br>
+                                            }<br><br>
+                                            .main-content {<br>
+                                            &nbsp;&nbsp;flex: 1;<br>
+                                            }
+                                        </div>
+                                    </div>
+                                </section>
+                                
+                                <section>
+                                    <h5 class="text-lg font-semibold text-gray-900 mb-3">3. Alternative: CSS Grid Solution</h5>
+                                    <p class="text-gray-600 mb-4">
+                                        CSS Grid provides another elegant solution for sticky footer layouts:
+                                    </p>
+                                    <div class="bg-gray-100 rounded-lg p-4 mb-4 font-mono text-sm">
+                                        <div class="text-gray-800">
+                                            .grid-container {<br>
+                                            &nbsp;&nbsp;min-height: 100vh;<br>
+                                            &nbsp;&nbsp;display: grid;<br>
+                                            &nbsp;&nbsp;grid-template-rows: auto 1fr auto;<br>
+                                            }
+                                        </div>
+                                    </div>
+                                </section>
+                                
+                                <section>
+                                    <h5 class="text-lg font-semibold text-gray-900 mb-3">4. Best Practices</h5>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div class="bg-green-50 p-6 rounded-lg">
+                                            <h6 class="font-semibold text-green-900 mb-3">✅ Do This</h6>
+                                            <ul class="space-y-2 text-green-800 text-sm">
+                                                <li>• Use semantic HTML structure</li>
+                                                <li>• Test with various content lengths</li>
+                                                <li>• Ensure mobile responsiveness</li>
+                                                <li>• Keep footer content concise</li>
+                                                <li>• Use consistent spacing</li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <div class="bg-red-50 p-6 rounded-lg">
+                                            <h6 class="font-semibold text-red-900 mb-3">❌ Avoid This</h6>
+                                            <ul class="space-y-2 text-red-800 text-sm">
+                                                <li>• Fixed positioning for footers</li>
+                                                <li>• Absolute positioning without testing</li>
+                                                <li>• Ignoring mobile viewports</li>
+                                                <li>• Overcomplicated CSS solutions</li>
+                                                <li>• Forgetting to test edge cases</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </section>
+                                
+                                <section>
+                                    <h5 class="text-lg font-semibold text-gray-900 mb-3">5. Testing Scenarios</h5>
+                                    <p class="text-gray-600 mb-4">
+                                        Always test your sticky footer implementation with these scenarios:
+                                    </p>
+                                    <div class="space-y-4">
+                                        <div class="border border-gray-200 rounded-lg p-4">
+                                            <h6 class="font-medium text-gray-900 mb-2">Short Content</h6>
+                                            <p class="text-gray-600 text-sm">Footer should stick to bottom of viewport, not float in middle of page.</p>
+                                        </div>
+                                        <div class="border border-gray-200 rounded-lg p-4">
+                                            <h6 class="font-medium text-gray-900 mb-2">Long Content</h6>
+                                            <p class="text-gray-600 text-sm">Footer should appear after all content, requiring scroll to reach.</p>
+                                        </div>
+                                        <div class="border border-gray-200 rounded-lg p-4">
+                                            <h6 class="font-medium text-gray-900 mb-2">Dynamic Content</h6>
+                                            <p class="text-gray-600 text-sm">Footer should adjust position when content is added or removed dynamically.</p>
+                                        </div>
+                                        <div class="border border-gray-200 rounded-lg p-4">
+                                            <h6 class="font-medium text-gray-900 mb-2">Mobile Devices</h6>
+                                            <p class="text-gray-600 text-sm">Layout should work correctly on various screen sizes and orientations.</p>
+                                        </div>
+                                    </div>
+                                </section>
+                                
+                                <section>
+                                    <h5 class="text-lg font-semibold text-gray-900 mb-3">6. Performance Considerations</h5>
+                                    <p class="text-gray-600 mb-4">
+                                        Sticky footer layouts are lightweight and performant, but consider these optimization tips:
+                                    </p>
+                                    <ul class="space-y-2 text-gray-600">
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Minimize CSS complexity for faster rendering
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Avoid unnecessary JavaScript for layout calculations
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Use CSS custom properties for maintainable code
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="w-2 h-2 bg-blue-600 rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                                            Test performance on lower-end devices
+                                        </li>
+                                    </ul>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty Content -->
+                <div id="empty-content" class="content-section hidden">
+                    <div class="bg-white rounded-xl shadow-lg p-8 mb-8 text-center">
+                        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-4">Minimal Content</h3>
+                        <p class="text-gray-600 mb-6 max-w-md mx-auto">
+                            This demonstrates the sticky footer with very minimal content. Notice how the footer stays at the bottom of the viewport.
+                        </p>
+                        <div class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Footer remains at bottom
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Sticky Footer -->
+        <footer class="footer bg-gray-900 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                <div class="footer-content flex flex-col md:flex-row justify-between items-center">
+                    <!-- Footer Brand -->
+                    <div class="flex items-center mb-6 md:mb-0">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold">Sticky Footer Demo</h3>
+                            <p class="text-gray-400 text-sm">Always perfectly positioned</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer Links -->
+                    <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
+                        <div class="flex space-x-6">
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        
+                        <div class="text-center md:text-right">
+                            <p class="text-gray-400 text-sm">
+                                © 2024 Sticky Footer Demo. This footer always stays at the bottom!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer Bottom -->
+                <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                        <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                            Built with CSS Flexbox • Responsive Design • Cross-browser Compatible
+                        </p>
+                        <div class="flex items-center space-x-4 text-sm text-gray-400">
+                            <span class="flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                                Footer Status: Active
+                            </span>
+                            <span>|</span>
+                            <span id="viewport-height">Viewport: --</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        class StickyFooterDemo {
+            constructor() {
+                this.currentContent = 'short';
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.updateViewportInfo();
+                this.showContent('short');
+                
+                // Update viewport info on resize
+                window.addEventListener('resize', () => this.updateViewportInfo());
+            }
+
+            bindEvents() {
+                // Content switching buttons
+                document.querySelectorAll('.content-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const contentType = e.target.dataset.content;
+                        this.showContent(contentType);
+                        this.updateActiveButton(e.target);
+                    });
+                });
+            }
+
+            showContent(contentType) {
+                // Hide all content sections
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+
+                // Show selected content section
+                const targetSection = document.getElementById(`${contentType}-content`);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('fade-in');
+                    
+                    // Remove fade-in class after animation
+                    setTimeout(() => {
+                        targetSection.classList.remove('fade-in');
+                    }, 500);
+                }
+
+                this.currentContent = contentType;
+                this.scrollToTop();
+            }
+
+            updateActiveButton(activeBtn) {
+                // Remove active styles from all buttons
+                document.querySelectorAll('.content-btn').forEach(btn => {
+                    btn.classList.remove('ring-4', 'ring-white', 'ring-opacity-50');
+                });
+
+                // Add active styles to clicked button
+                activeBtn.classList.add('ring-4', 'ring-white', 'ring-opacity-50');
+            }
+
+            updateViewportInfo() {
+                const viewportHeight = window.innerHeight;
+                const viewportElement = document.getElementById('viewport-height');
+                if (viewportElement) {
+                    viewportElement.textContent = `Viewport: ${viewportHeight}px`;
+                }
+            }
+
+            scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Initialize the demo when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new StickyFooterDemo();
+            
+            // Set initial active button
+            const firstBtn = document.querySelector('.content-btn[data-content="short"]');
+            if (firstBtn) {
+                firstBtn.classList.add('ring-4', 'ring-white', 'ring-opacity-50');
+            }
+        });
+
+        // Add some visual feedback for footer interaction
+        document.querySelector('.footer').addEventListener('mouseenter', function() {
+            this.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
+        });
+
+        document.querySelector('.footer').addEventListener('mouseleave', function() {
+            this.style.background = '#111827';
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984d6c7f9717b813',t:'MTc1ODgzMzc0MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

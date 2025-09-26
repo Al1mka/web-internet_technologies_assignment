@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Styled HTML Document — Internal CSS Example</title>
+
+  <!-- Internal stylesheet -->
+  <style>
+    /* Basic page setup */
+    :root {
+      --primary: #0b5fff;     /* a blue for accents */
+      --muted: #6b7280;       /* muted gray text */
+      --bg: #ffffff;
+      --base-font: 16px;
+      --heading-font: "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      font-size: var(--base-font);
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: #111827; /* default text color */
+      line-height: 1.5;
+    }
+
+    /* Headings */
+    h1 {
+      font-family: var(--heading-font);
+      font-size: 2rem;      /* 32px when base is 16px */
+      color: var(--primary);/* change text color */
+      margin: 1rem 0 0.5rem;
+    }
+    h2 {
+      font-size: 1.5rem;    /* 24px */
+      color: #0f172a;
+      margin: 0.75rem 0;
+    }
+
+    /* Paragraphs */
+    p {
+      font-size: 1rem;      /* 16px */
+      color: #374151;       /* darker muted gray */
+      margin: 0 0 1rem;
+    }
+
+    /* Links */
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline; /* pseudo-class for hover */
+    }
+
+    /* Classes and IDs */
+    .muted {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .large {
+      font-size: 1.125rem; /* 18px */
+      font-weight: 600;
+    }
+    #notice {
+      background: #fff7ed;
+      border-left: 4px solid #f59e0b;
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      color: #92400e;
+    }
+
+    /* Lists */
+    ul.features {
+      list-style: square inside;
+      padding-left: 0;
+      margin: 0 0 1rem;
+    }
+    ul.features li {
+      margin: 0.4rem 0;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 0.9rem;
+      border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.06);
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn.secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Responsive typography (simple example) */
+    @media (max-width: 480px) {
+      h1 { font-size: 1.5rem; } /* smaller headings on phones */
+      :root { --base-font: 15px; } /* reduce base slightly on small screens */
+    }
+
+    /* Utility helpers */
+    .text-center { text-align: center; }
+    .mb-1 { margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+
+  <main style="max-width:800px;margin:2rem auto;padding:0 1rem;">
+    <h1>Welcome — Internal CSS Example</h1>
+
+    <p class="muted">This paragraph uses the <code>.muted</code> class to change its color and slightly reduce font size.</p>
+
+    <p>Regular paragraph text. You can change its <strong>color</strong> in the CSS (see the <code>p</code> rule) or increase/decrease font size by adjusting <code>font-size</code>.</p>
+
+    <div id="notice">
+      Important notice: change the look by editing <code>#notice</code> styles in the &lt;style&gt; block.
+    </div>
+
+    <h2 class="large">Features</h2>
+    <ul class="features">
+      <li>Change text color with <code>color:</code></li>
+      <li>Change font size with <code>font-size:</code></li>
+      <li>Use classes for reusable styles (e.g., <code>.btn</code>, <code>.muted</code>).</li>
+    </ul>
+
+    <p class="text-center">
+      <a href="#" class="btn">Primary action</a>
+      <a href="#" class="btn secondary" style="margin-left:0.5rem;">Secondary</a>
+    </p>
+
+    <p class="mb-1">Example of an inline style (not recommended for maintainability): <span style="color:#ef4444;font-weight:700;">red text</span></p>
+
+    <p>Tip: to change the default font size for the whole page, edit <code>--base-font</code> or the <code>font-size</code> on <code>html, body</code>. To change the color of all headings, edit the <code>h1, h2, h3</code> rules.</p>
+  </main>
+
+</body>
+</html>

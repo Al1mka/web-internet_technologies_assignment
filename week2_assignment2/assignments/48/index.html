@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client-Side Validation Form</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #6a11cb;
+        }
+        
+        .error {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .success {
+            color: #2ecc71;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .col {
+            flex: 1;
+        }
+        
+        button {
+            background: linear-gradient(to right, #4a00e0, #8e2de2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+        
+        .form-footer a {
+            color: #6a11cb;
+            text-decoration: none;
+        }
+        
+        .password-strength {
+            height: 5px;
+            margin-top: 5px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .strength-weak {
+            width: 25%;
+            background-color: #e74c3c;
+        }
+        
+        .strength-medium {
+            width: 50%;
+            background-color: #f39c12;
+        }
+        
+        .strength-strong {
+            width: 100%;
+            background-color: #2ecc71;
+        }
+        
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .terms input {
+            width: auto;
+            margin-top: 5px;
+        }
+        
+        .terms label {
+            margin-bottom: 0;
+        }
+        
+        @media (max-width: 600px) {
+            .row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Create Your Account</h1>
+            <p>Join our community today</p>
+        </div>
+        
+        <div class="form-container">
+            <form id="registrationForm">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" placeholder="Enter your first name">
+                            <div class="error" id="firstNameError">First name is required and must be at least 2 characters</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" placeholder="Enter your last name">
+                            <div class="error" id="lastNameError">Last name is required and must be at least 2 characters</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email">
+                    <div class="error" id="emailError">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
+                    <div class="error" id="phoneError">Please enter a valid phone number (10 digits)</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Create a password">
+                    <div class="password-strength" id="passwordStrength"></div>
+                    <div class="error" id="passwordError">Password must be at least 8 characters with uppercase, lowercase, number, and special character</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password">
+                    <div class="error" id="confirmPasswordError">Passwords do not match</div>
+                </div>
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="birthdate">Date of Birth</label>
+                            <input type="date" id="birthdate" name="birthdate">
+                            <div class="error" id="birthdateError">You must be at least 18 years old</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="country">Country</label>
+                            <select id="country" name="country">
+                                <option value="">Select your country</option>
+                                <option value="us">United States</option>
+                                <option value="ca">Canada</option>
+                                <option value="uk">United Kingdom</option>
+                                <option value="au">Australia</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <div class="error" id="countryError">Please select your country</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="website">Website (Optional)</label>
+                    <input type="url" id="website" name="website" placeholder="https://example.com">
+                    <div class="error" id="websiteError">Please enter a valid URL</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bio">Bio (Optional)</label>
+                    <textarea id="bio" name="bio" rows="4" placeholder="Tell us about yourself"></textarea>
+                    <div class="success" id="bioSuccess">Great bio! (optional)</div>
+                </div>
+                
+                <div class="form-group terms">
+                    <input type="checkbox" id="terms" name="terms">
+                    <label for="terms">I agree to the <a href="#">Terms and Conditions</a></label>
+                    <div class="error" id="termsError">You must accept the terms and conditions</div>
+                </div>
+                
+                <button type="submit">Create Account</button>
+                
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#">Sign in</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('registrationForm');
+            
+            // Get all input elements
+            const firstName = document.getElementById('firstName');
+            const lastName = document.getElementById('lastName');
+            const email = document.getElementById('email');
+            const phone = document.getElementById('phone');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const birthdate = document.getElementById('birthdate');
+            const country = document.getElementById('country');
+            const website = document.getElementById('website');
+            const bio = document.getElementById('bio');
+            const terms = document.getElementById('terms');
+            
+            // Get all error elements
+            const firstNameError = document.getElementById('firstNameError');
+            const lastNameError = document.getElementById('lastNameError');
+            const emailError = document.getElementById('emailError');
+            const phoneError = document.getElementById('phoneError');
+            const passwordError = document.getElementById('passwordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            const birthdateError = document.getElementById('birthdateError');
+            const countryError = document.getElementById('countryError');
+            const websiteError = document.getElementById('websiteError');
+            const termsError = document.getElementById('termsError');
+            const bioSuccess = document.getElementById('bioSuccess');
+            const passwordStrength = document.getElementById('passwordStrength');
+            
+            // Real-time validation functions
+            function validateFirstName() {
+                if (firstName.value.length < 2) {
+                    showError(firstName, firstNameError);
+                    return false;
+                } else {
+                    hideError(firstName, firstNameError);
+                    return true;
+                }
+            }
+            
+            function validateLastName() {
+                if (lastName.value.length < 2) {
+                    showError(lastName, lastNameError);
+                    return false;
+                } else {
+                    hideError(lastName, lastNameError);
+                    return true;
+                }
+            }
+            
+            function validateEmail() {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email.value)) {
+                    showError(email, emailError);
+                    return false;
+                } else {
+                    hideError(email, emailError);
+                    return true;
+                }
+            }
+            
+            function validatePhone() {
+                const phoneRegex = /^\d{10}$/;
+                const cleanedPhone = phone.value.replace(/\D/g, '');
+                if (!phoneRegex.test(cleanedPhone)) {
+                    showError(phone, phoneError);
+                    return false;
+                } else {
+                    hideError(phone, phoneError);
+                    return true;
+                }
+            }
+            
+            function validatePassword() {
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                
+                if (!passwordRegex.test(password.value)) {
+                    showError(password, passwordError);
+                    updatePasswordStrength('weak');
+                    return false;
+                } else {
+                    hideError(password, passwordError);
+                    
+                    // Check password strength
+                    if (password.value.length >= 12) {
+                        updatePasswordStrength('strong');
+                    } else if (password.value.length >= 8) {
+                        updatePasswordStrength('medium');
+                    }
+                    
+                    return true;
+                }
+            }
+            
+            function updatePasswordStrength(strength) {
+                passwordStrength.className = 'password-strength';
+                
+                if (strength === 'weak') {
+                    passwordStrength.classList.add('strength-weak');
+                } else if (strength === 'medium') {
+                    passwordStrength.classList.add('strength-medium');
+                } else if (strength === 'strong') {
+                    passwordStrength.classList.add('strength-strong');
+                }
+            }
+            
+            function validateConfirmPassword() {
+                if (confirmPassword.value !== password.value) {
+                    showError(confirmPassword, confirmPasswordError);
+                    return false;
+                } else {
+                    hideError(confirmPassword, confirmPasswordError);
+                    return true;
+                }
+            }
+            
+            function validateBirthdate() {
+                const today = new Date();
+                const birthDate = new Date(birthdate.value);
+                const age = today.getFullYear() - birthDate.getFullYear();
+                const monthDiff = today.getMonth() - birthDate.getMonth();
+                
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                
+                if (age < 18 || !birthdate.value) {
+                    showError(birthdate, birthdateError);
+                    return false;
+                } else {
+                    hideError(birthdate, birthdateError);
+                    return true;
+                }
+            }
+            
+            function validateCountry() {
+                if (!country.value) {
+                    showError(country, countryError);
+                    return false;
+                } else {
+                    hideError(country, countryError);
+                    return true;
+                }
+            }
+            
+            function validateWebsite() {
+                if (website.value && !isValidUrl(website.value)) {
+                    showError(website, websiteError);
+                    return false;
+                } else {
+                    hideError(website, websiteError);
+                    return true;
+                }
+            }
+            
+            function isValidUrl(string) {
+                try {
+                    new URL(string);
+                    return true;
+                } catch (_) {
+                    return false;
+                }
+            }
+            
+            function validateTerms() {
+                if (!terms.checked) {
+                    showError(terms, termsError);
+                    return false;
+                } else {
+                    hideError(terms, termsError);
+                    return true;
+                }
+            }
+            
+            function showBioSuccess() {
+                if (bio.value.length > 0) {
+                    bioSuccess.style.display = 'block';
+                } else {
+                    bioSuccess.style.display = 'none';
+                }
+            }
+            
+            // Helper functions to show/hide errors
+            function showError(input, errorElement) {
+                input.style.borderColor = '#e74c3c';
+                errorElement.style.display = 'block';
+            }
+            
+            function hideError(input, errorElement) {
+                input.style.borderColor = '#ddd';
+                errorElement.style.display = 'none';
+            }
+            
+            // Event listeners for real-time validation
+            firstName.addEventListener('input', validateFirstName);
+            lastName.addEventListener('input', validateLastName);
+            email.addEventListener('input', validateEmail);
+            phone.addEventListener('input', validatePhone);
+            password.addEventListener('input', validatePassword);
+            confirmPassword.addEventListener('input', validateConfirmPassword);
+            birthdate.addEventListener('change', validateBirthdate);
+            country.addEventListener('change', validateCountry);
+            website.addEventListener('input', validateWebsite);
+            terms.addEventListener('change', validateTerms);
+            bio.addEventListener('input', showBioSuccess);
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate all fields
+                const isFirstNameValid = validateFirstName();
+                const isLastNameValid = validateLastName();
+                const isEmailValid = validateEmail();
+                const isPhoneValid = validatePhone();
+                const isPasswordValid = validatePassword();
+                const isConfirmPasswordValid = validateConfirmPassword();
+                const isBirthdateValid = validateBirthdate();
+                const isCountryValid = validateCountry();
+                const isWebsiteValid = validateWebsite();
+                const isTermsValid = validateTerms();
+                
+                // If all validations pass
+                if (isFirstNameValid && isLastNameValid && isEmailValid && 
+                    isPhoneValid && isPasswordValid && isConfirmPasswordValid && 
+                    isBirthdateValid && isCountryValid && isWebsiteValid && isTermsValid) {
+                    
+                    // In a real application, you would submit the form data to a server here
+                    alert('Form submitted successfully!');
+                    form.reset();
+                    passwordStrength.className = 'password-strength';
+                    bioSuccess.style.display = 'none';
+                } else {
+                    alert('Please fix the errors in the form before submitting.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

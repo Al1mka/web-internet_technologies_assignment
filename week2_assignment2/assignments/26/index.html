@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Dropdown Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .description {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        
+        .dropdown-container {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #2575fc;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+        }
+        
+        select:hover {
+            border-color: #bdbdbd;
+        }
+        
+        .result {
+            background-color: #f0f7ff;
+            border-left: 4px solid #2575fc;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .result h3 {
+            color: #2575fc;
+            margin-bottom: 5px;
+        }
+        
+        .result p {
+            color: #555;
+        }
+        
+        .instructions {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 30px;
+        }
+        
+        .instructions h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+            color: #666;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .code-example {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simple Dropdown Menu</h1>
+        <p class="description">This example demonstrates a dropdown menu using HTML &lt;select&gt; and &lt;option&gt; tags with enhanced styling.</p>
+        
+        <div class="dropdown-container">
+            <label for="fruit-select">Choose a fruit:</label>
+            <select id="fruit-select">
+                <option value="" disabled selected>Select a fruit...</option>
+                <option value="apple">Apple</option>
+                <option value="banana">Banana</option>
+                <option value="orange">Orange</option>
+                <option value="grape">Grape</option>
+                <option value="strawberry">Strawberry</option>
+                <option value="pineapple">Pineapple</option>
+                <option value="mango">Mango</option>
+            </select>
+            
+            <div class="result" id="selection-result">
+                <h3>Your Selection:</h3>
+                <p id="selected-value">You selected: <span></span></p>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>How It Works</h3>
+            <ul>
+                <li>The dropdown is created using the HTML &lt;select&gt; element</li>
+                <li>Each option is defined using the &lt;option&gt; tag</li>
+                <li>JavaScript is used to display the selected value</li>
+                <li>CSS enhances the appearance and adds interactive effects</li>
+            </ul>
+        </div>
+        
+        <div class="code-example">
+            <pre>&lt;select id="fruit-select"&gt;
+  &lt;option value="" disabled selected&gt;Select a fruit...&lt;/option&gt;
+  &lt;option value="apple"&gt;Apple&lt;/option&gt;
+  &lt;option value="banana"&gt;Banana&lt;/option&gt;
+  &lt;option value="orange"&gt;Orange&lt;/option&gt;
+  &lt;option value="grape"&gt;Grape&lt;/option&gt;
+&lt;/select&gt;</pre>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectElement = document.getElementById('fruit-select');
+            const resultDiv = document.getElementById('selection-result');
+            const selectedValueSpan = document.querySelector('#selected-value span');
+            
+            selectElement.addEventListener('change', function() {
+                if (this.value) {
+                    selectedValueSpan.textContent = this.options[this.selectedIndex].text;
+                    resultDiv.style.display = 'block';
+                } else {
+                    resultDiv.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

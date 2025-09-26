@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Multilingual Website Example</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        .lang-switcher { margin-bottom: 1em; }
+        button { margin-right: 0.5em; }
+    </style>
+</head>
+<body>
+    <div class="lang-switcher">
+        <button onclick="setLanguage('en')">English</button>
+        <button onclick="setLanguage('es')">Español</button>
+        <button onclick="setLanguage('fr')">Français</button>
+    </div>
+
+    <h1 id="title" lang="en">Welcome to our Website!</h1>
+    <p id="desc" lang="en">
+        This is a simple multilingual website. Use the buttons above to switch languages.
+    </p>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Welcome to our Website!",
+                desc: "This is a simple multilingual website. Use the buttons above to switch languages."
+            },
+            es: {
+                title: "¡Bienvenido a nuestro sitio web!",
+                desc: "Este es un sitio web multilingüe sencillo. Utiliza los botones de arriba para cambiar de idioma."
+            },
+            fr: {
+                title: "Bienvenue sur notre site Web !",
+                desc: "Ceci est un site Web multilingue simple. Utilisez les boutons ci-dessus pour changer de langue."
+            }
+        };
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.getElementById('title').textContent = translations[lang].title;
+            document.getElementById('title').setAttribute('lang', lang);
+            document.getElementById('desc').textContent = translations[lang].desc;
+            document.getElementById('desc').setAttribute('lang', lang);
+        }
+    </script>
+</body>
+</html>

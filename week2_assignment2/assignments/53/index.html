@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complex Form with Validation</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2em; }
+        form { max-width: 500px; margin: auto; }
+        .form-group { margin-bottom: 1em; }
+        label { display: block; margin-bottom: 0.3em; }
+        input, select { width: 100%; padding: 0.5em; }
+        .error { color: red; font-size: 0.9em; }
+        .success { color: green; font-size: 1em; }
+    </style>
+</head>
+<body>
+    <h2>Complex Form</h2>
+    <form id="complexForm" novalidate>
+        <div class="form-group">
+            <label for="fullname">Full Name:</label>
+            <input type="text" id="fullname" name="fullname" required minlength="3">
+            <div class="error" id="fullnameError"></div>
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required>
+            <div class="error" id="dobError"></div>
+        </div>
+        <div class="form-group">
+            <label for="favcolor">Favorite Color:</label>
+            <input type="color" id="favcolor" name="favcolor" required>
+            <div class="error" id="colorError"></div>
+        </div>
+        <div class="form-group">
+            <label for="satisfaction">Satisfaction Level (1-10):</label>
+            <input type="range" id="satisfaction" name="satisfaction" min="1" max="10" value="5">
+            <span id="satisfactionValue">5</span>
+            <div class="error" id="satisfactionError"></div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
+            <div class="error" id="emailError"></div>
+        </div>
+        <button type="submit">Submit</button>
+        <div class="success" id="successMsg"></div>
+    </form>
+    <script>
+        const form = document.getElementById('complexForm');
+        const satisfaction = document.getElementById('satisfaction');
+        const satisfactionValue = document.getElementById('satisfactionValue');
+
+        satisfaction.addEventListener('input', () => {
+            satisfactionValue.textContent = satisfaction.value;
+        });
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let valid = true;
+
+            // Clear previous errors
+            document.getElementById('fullnameError').textContent = '';
+            document.getElementById('dobError').textContent = '';
+            document.getElementById('colorError').textContent = '';
+            document.getElementById('satisfactionError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('successMsg').textContent = '';
+
+            // Full Name validation
+            const fullname = form.fullname.value.trim();
+            if (fullname.length < 3) {
+                document.getElementById('fullnameError').textContent = 'Full name must be at least 3 characters.';
+                valid = false;
+            }
+
+            // Date of Birth validation
+            const dob = form.dob.value;
+            if (!dob) {
+                document.getElementById('dobError').textContent = 'Please select your date of birth.';
+                valid = false;
+            } else {
+                const dobDate = new Date(dob);
+                const today = new Date();
+                if (dobDate >= today) {
+                    document.getElementById('dobError').textContent = 'Date of birth must be in the past.';
+                    valid = false;
+                }
+            }
+
+            // Color validation
+            const color = form.favcolor.value;
+            if (!color) {
+                document.getElementById('colorError').textContent = 'Please choose your favorite color.';
+                valid = false;
+            }
+
+            // Satisfaction validation
+            const satisfactionVal = parseInt(form.satisfaction.value, 10);
+            if (isNaN(satisfactionVal) || satisfactionVal < 1 || satisfactionVal > 10) {
+                document.getElementById('satisfactionError').textContent = 'Satisfaction must be between 1 and 10.';
+                valid = false;
+            }
+
+            // Email validation
+            const email = form.email.value.trim();
+            if (!email) {
+                document.getElementById('emailError').textContent = 'Email is required.';
+                valid = false;
+            } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('emailError').textContent = 'Please enter a valid email address.';
+                valid = false;
+            }
+
+            if (valid) {
+                document.getElementById('successMsg').textContent = 'Form submitted successfully!';
+                form.reset();
+                satisfactionValue.textContent = '5';
+            }
+        });
+    </script>
+</body>
+</html>

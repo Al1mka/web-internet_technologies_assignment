@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Step Registration Form</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+        }
+        
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 4px;
+            width: 100%;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 4px;
+            width: var(--progress-width, 0%);
+            background-color: #4caf50;
+            z-index: 2;
+            transition: width 0.3s ease;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #757575;
+            z-index: 3;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+        }
+        
+        .step.active {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .step.completed {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .step-label {
+            position: absolute;
+            top: 45px;
+            font-size: 14px;
+            color: #757575;
+            width: 100px;
+            text-align: center;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+        
+        .form-step {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+        
+        .error-message {
+            color: #f44336;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn-prev {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+        
+        .btn-next, .btn-submit {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .btn-prev:hover {
+            background-color: #d5d5d5;
+        }
+        
+        .btn-next:hover, .btn-submit:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-prev:disabled {
+            background-color: #f5f5f5;
+            color: #bdbdbd;
+            cursor: not-allowed;
+        }
+        
+        .summary-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            color: #4caf50;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 20px;
+            }
+            
+            .step-label {
+                font-size: 12px;
+                width: 80px;
+            }
+            
+            .step {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="progress-bar">
+            <div class="step active" id="step1">
+                1
+                <span class="step-label">Personal Info</span>
+            </div>
+            <div class="step" id="step2">
+                2
+                <span class="step-label">Contact Details</span>
+            </div>
+            <div class="step" id="step3">
+                3
+                <span class="step-label">Preferences</span>
+            </div>
+            <div class="step" id="step4">
+                4
+                <span class="step-label">Review</span>
+            </div>
+        </div>
+        
+        <form id="multiStepForm">
+            <!-- Step 1: Personal Information -->
+            <div class="form-step active" id="step1-form">
+                <h2>Personal Information</h2>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                    <div class="error-message" id="firstNameError">Please enter your first name</div>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                    <div class="error-message" id="lastNameError">Please enter your last name</div>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" required>
+                    <div class="error-message" id="dobError">Please enter your date of birth</div>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn-prev" disabled>Previous</button>
+                    <button type="button" class="btn-next" onclick="nextStep(1)">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Contact Details -->
+            <div class="form-step" id="step2-form">
+                <h2>Contact Details</h2>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="emailError">Please enter a valid email address</div>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                    <div class="error-message" id="phoneError">Please enter a valid phone number</div>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                    <div class="error-message" id="addressError">Please enter your address</div>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn-prev" onclick="prevStep(2)">Previous</button>
+                    <button type="button" class="btn-next" onclick="nextStep(2)">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Preferences -->
+            <div class="form-step" id="step3-form">
+                <h2>Preferences</h2>
+                <div class="form-group">
+                    <label for="newsletter">Subscribe to Newsletter</label>
+                    <select id="newsletter" name="newsletter">
+                        <option value="yes">Yes, please</option>
+                        <option value="no">No, thanks</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="communication">Preferred Communication Method</label>
+                    <select id="communication" name="communication">
+                        <option value="email">Email</option>
+                        <option value="phone">Phone</option>
+                        <option value="sms">SMS</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="interests">Areas of Interest (select all that apply)</label>
+                    <div>
+                        <input type="checkbox" id="tech" name="interests" value="technology">
+                        <label for="tech" style="display: inline; margin-left: 5px;">Technology</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="health" name="interests" value="health">
+                        <label for="health" style="display: inline; margin-left: 5px;">Health & Wellness</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="finance" name="interests" value="finance">
+                        <label for="finance" style="display: inline; margin-left: 5px;">Finance</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" id="education" name="interests" value="education">
+                        <label for="education" style="display: inline; margin-left: 5px;">Education</label>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn-prev" onclick="prevStep(3)">Previous</button>
+                    <button type="button" class="btn-next" onclick="nextStep(3)">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Review and Submit -->
+            <div class="form-step" id="step4-form">
+                <h2>Review Your Information</h2>
+                <div id="summary">
+                    <!-- Summary will be populated by JavaScript -->
+                </div>
+                <div class="button-group">
+                    <button type="button" class="btn-prev" onclick="prevStep(4)">Previous</button>
+                    <button type="button" class="btn-submit" onclick="submitForm()">Submit</button>
+                </div>
+            </div>
+            
+            <!-- Success Message -->
+            <div class="form-step" id="success-message">
+                <div class="success-message">
+                    <div class="success-icon">✓</div>
+                    <h2>Registration Successful!</h2>
+                    <p>Thank you for completing the form. We have received your information.</p>
+                    <button type="button" class="btn-submit" onclick="resetForm()" style="margin-top: 20px;">Start New Registration</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 4;
+        
+        // Update progress bar
+        function updateProgressBar() {
+            const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.documentElement.style.setProperty('--progress-width', progressPercentage + '%');
+            
+            // Update step indicators
+            for (let i = 1; i <= totalSteps; i++) {
+                const step = document.getElementById('step' + i);
+                if (i < currentStep) {
+                    step.classList.add('completed');
+                    step.classList.remove('active');
+                } else if (i === currentStep) {
+                    step.classList.add('active');
+                    step.classList.remove('completed');
+                } else {
+                    step.classList.remove('active', 'completed');
+                }
+            }
+        }
+        
+        // Show specific step
+        function showStep(stepNumber) {
+            // Hide all steps
+            document.querySelectorAll('.form-step').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Show the current step
+            if (stepNumber <= totalSteps) {
+                document.getElementById('step' + stepNumber + '-form').classList.add('active');
+            } else {
+                document.getElementById('success-message').classList.add('active');
+            }
+            
+            currentStep = stepNumber;
+            updateProgressBar();
+        }
+        
+        // Validate step
+        function validateStep(stepNumber) {
+            let isValid = true;
+            
+            if (stepNumber === 1) {
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const dob = document.getElementById('dob').value;
+                
+                if (!firstName) {
+                    document.getElementById('firstNameError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('firstNameError').style.display = 'none';
+                }
+                
+                if (!lastName) {
+                    document.getElementById('lastNameError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('lastNameError').style.display = 'none';
+                }
+                
+                if (!dob) {
+                    document.getElementById('dobError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('dobError').style.display = 'none';
+                }
+            }
+            
+            if (stepNumber === 2) {
+                const email = document.getElementById('email').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const address = document.getElementById('address').value.trim();
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!email || !emailRegex.test(email)) {
+                    document.getElementById('emailError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('emailError').style.display = 'none';
+                }
+                
+                if (!phone) {
+                    document.getElementById('phoneError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('phoneError').style.display = 'none';
+                }
+                
+                if (!address) {
+                    document.getElementById('addressError').style.display = 'block';
+                    isValid = false;
+                } else {
+                    document.getElementById('addressError').style.display = 'none';
+                }
+            }
+            
+            return isValid;
+        }
+        
+        // Next step
+        function nextStep(current) {
+            if (validateStep(current)) {
+                if (current === totalSteps) {
+                    showStep(current + 1); // Show success message
+                } else {
+                    showStep(current + 1);
+                }
+                
+                // If moving to review step, update summary
+                if (current + 1 === totalSteps) {
+                    updateSummary();
+                }
+            }
+        }
+        
+        // Previous step
+        function prevStep(current) {
+            showStep(current - 1);
+        }
+        
+        // Update summary for review step
+        function updateSummary() {
+            const summaryContainer = document.getElementById('summary');
+            let summaryHTML = '';
+            
+            // Personal Information
+            summaryHTML += `
+                <div class="summary-item">
+                    <div class="summary-label">Personal Information</div>
+                    <div>Name: ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}</div>
+                    <div>Date of Birth: ${document.getElementById('dob').value}</div>
+                </div>
+            `;
+            
+            // Contact Details
+            summaryHTML += `
+                <div class="summary-item">
+                    <div class="summary-label">Contact Details</div>
+                    <div>Email: ${document.getElementById('email').value}</div>
+                    <div>Phone: ${document.getElementById('phone').value}</div>
+                    <div>Address: ${document.getElementById('address').value}</div>
+                </div>
+            `;
+            
+            // Preferences
+            const newsletter = document.getElementById('newsletter').value === 'yes' ? 'Yes' : 'No';
+            const communication = document.getElementById('communication').options[document.getElementById('communication').selectedIndex].text;
+            
+            // Get selected interests
+            const interestCheckboxes = document.querySelectorAll('input[name="interests"]:checked');
+            const interests = Array.from(interestCheckboxes).map(cb => cb.value).join(', ') || 'None selected';
+            
+            summaryHTML += `
+                <div class="summary-item">
+                    <div class="summary-label">Preferences</div>
+                    <div>Newsletter Subscription: ${newsletter}</div>
+                    <div>Preferred Communication: ${communication}</div>
+                    <div>Interests: ${interests}</div>
+                </div>
+            `;
+            
+            summaryContainer.innerHTML = summaryHTML;
+        }
+        
+        // Submit form
+        function submitForm() {
+            // In a real application, you would send the data to a server here
+            // For this demo, we'll just show the success message
+            showStep(totalSteps + 1);
+        }
+        
+        // Reset form
+        function resetForm() {
+            document.getElementById('multiStepForm').reset();
+            showStep(1);
+        }
+        
+        // Initialize the form
+        updateProgressBar();
+    </script>
+</body>
+</html>

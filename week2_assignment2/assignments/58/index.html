@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Infinite Scrolling Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0 0 50px 0;
+            background: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .item {
+            padding: 16px;
+            border-bottom: 1px solid #eee;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="content"></div>
+    <div class="loading" id="loading" style="display:none;">Loading...</div>
+
+    <script>
+        const content = document.getElementById('content');
+        const loading = document.getElementById('loading');
+        let itemCount = 0;
+        const itemsPerLoad = 10;
+        let loadingInProgress = false;
+
+        function loadMoreItems() {
+            loading.style.display = 'block';
+            loadingInProgress = true;
+            setTimeout(() => {
+                for (let i = 0; i < itemsPerLoad; i++) {
+                    itemCount++;
+                    const div = document.createElement('div');
+                    div.className = 'item';
+                    div.textContent = `Item #${itemCount}`;
+                    content.appendChild(div);
+                }
+                loading.style.display = 'none';
+                loadingInProgress = false;
+            }, 700); // Simulate network delay
+        }
+
+        // Initial load
+        loadMoreItems();
+
+        window.addEventListener('scroll', () => {
+            if (loadingInProgress) return;
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+                loadMoreItems();
+            }
+        });
+    </script>
+</body>
+</html>

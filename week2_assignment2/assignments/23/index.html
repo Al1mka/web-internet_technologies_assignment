@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #87CEEB; /* Sky blue - default */
+            transition: background-color 0.3s ease;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            line-height: 1.6;
+            color: #666;
+        }
+        
+        /* Media query for screens < 600px */
+        @media (max-width: 600px) {
+            body {
+                background-color: #FFB6C1; /* Light pink */
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Optional: Add a visual indicator */
+        .screen-size {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="screen-size" id="screenSize"></div>
+    <div class="container">
+        <h1>Welcome to My Responsive Website</h1>
+        <p>This page demonstrates how media queries work. Resize your browser window to see the background color change when the width drops below 600px.</p>
+        <p>On larger screens, the background is light blue. On mobile devices (less than 600px wide), it changes to light pink.</p>
+    </div>
+
+    <script>
+        // Optional: Show current screen width
+        function updateScreenSize() {
+            document.getElementById('screenSize').textContent = 
+                'Width: ' + window.innerWidth + 'px';
+        }
+        
+        window.addEventListener('resize', updateScreenSize);
+        updateScreenSize();
+    </script>
+</body>
+</html>

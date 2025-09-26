@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Wireless Headphones - TechStore</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        .image-zoom {
+            transition: transform 0.3s ease;
+        }
+        .image-zoom:hover {
+            transform: scale(1.05);
+        }
+        .cart-animation {
+            animation: addToCart 0.6s ease-in-out;
+        }
+        @keyframes addToCart {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .star-filled {
+            color: #fbbf24;
+        }
+        .notification {
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-blue-600">TechStore</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="relative p-2 text-gray-600 hover:text-blue-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                        </svg>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Success Notification -->
+    <div id="notification" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 hidden notification">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Item added to cart!
+        </div>
+    </div>
+
+    <!-- Product Page -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Breadcrumb -->
+        <nav class="flex mb-8" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                <li><a href="#" class="hover:text-blue-600">Home</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li><a href="#" class="hover:text-blue-600">Electronics</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li><a href="#" class="hover:text-blue-600">Headphones</a></li>
+                <li><span class="mx-2">/</span></li>
+                <li class="text-gray-900">Premium Wireless Headphones</li>
+            </ol>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Product Images -->
+            <div class="space-y-4">
+                <div class="aspect-square bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div id="main-image" class="w-full h-full flex items-center justify-center image-zoom cursor-pointer">
+                        <svg class="w-80 h-80 text-gray-800" viewBox="0 0 400 400" fill="currentColor">
+                            <!-- Headphone SVG -->
+                            <path d="M200 50c-82.8 0-150 67.2-150 150v50c0 16.6 13.4 30 30 30h20c16.6 0 30-13.4 30-30v-40c0-11 9-20 20-20s20 9 20 20v40c0 16.6 13.4 30 30 30h40c16.6 0 30-13.4 30-30v-40c0-11 9-20 20-20s20 9 20 20v40c0 16.6 13.4 30 30 30h20c16.6 0 30-13.4 30-30v-50c0-82.8-67.2-150-150-150z"/>
+                            <circle cx="120" cy="220" r="35" fill="#1f2937"/>
+                            <circle cx="280" cy="220" r="35" fill="#1f2937"/>
+                            <path d="M160 180h80c11 0 20 9 20 20s-9 20-20 20h-80c-11 0-20-9-20-20s9-20 20-20z" fill="#3b82f6"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <!-- Thumbnail Images -->
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="aspect-square bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer border-2 border-blue-500">
+                        <div class="w-full h-full flex items-center justify-center p-2">
+                            <svg class="w-full h-full text-gray-800" viewBox="0 0 100 100" fill="currentColor">
+                                <path d="M50 12.5c-20.7 0-37.5 16.8-37.5 37.5v12.5c0 4.1 3.4 7.5 7.5 7.5h5c4.1 0 7.5-3.4 7.5-7.5v-10c0-2.8 2.2-5 5-5s5 2.2 5 5v10c0 4.1 3.4 7.5 7.5 7.5h10c4.1 0 7.5-3.4 7.5-7.5v-10c0-2.8 2.2-5 5-5s5 2.2 5 5v10c0 4.1 3.4 7.5 7.5 7.5h5c4.1 0 7.5-3.4 7.5-7.5V50c0-20.7-16.8-37.5-37.5-37.5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="aspect-square bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer border-2 border-transparent hover:border-gray-300">
+                        <div class="w-full h-full flex items-center justify-center p-2">
+                            <svg class="w-full h-full text-blue-600" viewBox="0 0 100 100" fill="currentColor">
+                                <path d="M50 12.5c-20.7 0-37.5 16.8-37.5 37.5v12.5c0 4.1 3.4 7.5 7.5 7.5h5c4.1 0 7.5-3.4 7.5-7.5v-10c0-2.8 2.2-5 5-5s5 2.2 5 5v10c0 4.1 3.4 7.5 7.5 7.5h10c4.1 0 7.5-3.4 7.5-7.5v-10c0-2.8 2.2-5 5-5s5 2.2 5 5v10c0 4.1 3.4 7.5 7.5 7.5h5c4.1 0 7.5-3.4 7.5-7.5V50c0-20.7-16.8-37.5-37.5-37.5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="aspect-square bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer border-2 border-transparent hover:border-gray-300">
+                        <div class="w-full h-full flex items-center justify-center p-2">
+                            <svg class="w-full h-full text-red-600" viewBox="0 0 100 100" fill="currentColor">
+                                <path d="M50 12.5c-20.7 0-37.5 16.8-37.5 37.5v12.5c0 4.1 3.4 7.5 7.5 7.5h5c4.1 0 7.5-3.4 7.5-7.5v-10c0-2.8 2.2-5 5-5s5 2.2 5 5v10c0 4.1 3.4 7.5 7.5 7.5h10c4.1 0 7.5-3.4 7.5-7.5v-10c0-2.8 2.2-5 5-5s5 2.2 5 5v10c0 4.1 3.4 7.5 7.5 7.5h5c4.1 0 7.5-3.4 7.5-7.5V50c0-20.7-16.8-37.5-37.5-37.5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="aspect-square bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer border-2 border-transparent hover:border-gray-300">
+                        <div class="w-full h-full flex items-center justify-center p-2">
+                            <svg class="w-full h-full text-green-600" viewBox="0 0 100 100" fill="currentColor">
+                                <path d="M50 12.5c-20.7 0-37.5 16.8-37.5 37.5v12.5c0 4.1 3.4 7.5 7.5 7.5h5c4.1 0 7.5-3.4 7.5-7.5v-10c0-2.8 2.2-5 5-5s5 2.2 5 5v10c0 4.1 3.4 7.5 7.5 7.5h10c4.1 0 7.5-3.4 7.5-7.5v-10c0-2.8 2.2-5 5-5s5 2.2 5 5v10c0 4.1 3.4 7.5 7.5 7.5h5c4.1 0 7.5-3.4 7.5-7.5V50c0-20.7-16.8-37.5-37.5-37.5z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="space-y-6">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Premium Wireless Headphones</h1>
+                    <p class="text-lg text-gray-600">Professional Grade Audio Experience</p>
+                </div>
+
+                <!-- Rating -->
+                <div class="flex items-center space-x-2">
+                    <div class="flex space-x-1">
+                        <span class="star-filled text-xl">★</span>
+                        <span class="star-filled text-xl">★</span>
+                        <span class="star-filled text-xl">★</span>
+                        <span class="star-filled text-xl">★</span>
+                        <span class="star-filled text-xl">★</span>
+                    </div>
+                    <span class="text-sm text-gray-600">(4.8/5 - 2,847 reviews)</span>
+                </div>
+
+                <!-- Price -->
+                <div class="flex items-center space-x-4">
+                    <span class="text-3xl font-bold text-gray-900">$299.99</span>
+                    <span class="text-xl text-gray-500 line-through">$399.99</span>
+                    <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-sm font-medium">25% OFF</span>
+                </div>
+
+                <!-- Color Selection -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-3">Color</h3>
+                    <div class="flex space-x-3">
+                        <button class="w-8 h-8 bg-gray-800 rounded-full border-2 border-blue-500 focus:outline-none"></button>
+                        <button class="w-8 h-8 bg-blue-600 rounded-full border-2 border-transparent hover:border-gray-300 focus:outline-none"></button>
+                        <button class="w-8 h-8 bg-red-600 rounded-full border-2 border-transparent hover:border-gray-300 focus:outline-none"></button>
+                        <button class="w-8 h-8 bg-green-600 rounded-full border-2 border-transparent hover:border-gray-300 focus:outline-none"></button>
+                    </div>
+                </div>
+
+                <!-- Quantity -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 mb-3">Quantity</h3>
+                    <div class="flex items-center space-x-3">
+                        <button id="decrease-qty" class="w-10 h-10 border border-gray-300 rounded-md flex items-center justify-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <span class="text-lg font-medium">−</span>
+                        </button>
+                        <span id="quantity" class="text-lg font-medium w-12 text-center">1</span>
+                        <button id="increase-qty" class="w-10 h-10 border border-gray-300 rounded-md flex items-center justify-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <span class="text-lg font-medium">+</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Add to Cart Button -->
+                <div class="space-y-4">
+                    <button id="add-to-cart" class="w-full bg-blue-600 text-white py-4 px-6 rounded-lg text-lg font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                        Add to Cart - $299.99
+                    </button>
+                    <button class="w-full border border-gray-300 text-gray-700 py-4 px-6 rounded-lg text-lg font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors">
+                        Add to Wishlist ♡
+                    </button>
+                </div>
+
+                <!-- Product Features -->
+                <div class="border-t pt-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Key Features</h3>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Active Noise Cancellation
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            30-hour battery life
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Premium leather comfort
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Hi-Res Audio certified
+                        </li>
+                        <li class="flex items-center">
+                            <span class="text-green-500 mr-2">✓</span>
+                            Quick charge (3 hours in 10 minutes)
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Shipping Info -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h1.586a1 1 0 01.707.293l1.414 1.414a1 1 0 00.707.293H15a2 2 0 012 2v0M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
+                        </svg>
+                        <span class="font-medium text-gray-900">Free shipping on orders over $200</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Estimated delivery: 2-3 business days</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Description -->
+        <div class="mt-16 border-t pt-16">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Product Description</h2>
+                    <div class="prose prose-gray max-w-none">
+                        <p class="text-gray-600 mb-4">
+                            Experience audio like never before with our Premium Wireless Headphones. Engineered for audiophiles and professionals, these headphones deliver exceptional sound quality with deep bass, crystal-clear mids, and sparkling highs.
+                        </p>
+                        <p class="text-gray-600 mb-4">
+                            The advanced Active Noise Cancellation technology blocks out unwanted ambient noise, allowing you to focus on your music, calls, or work. With an impressive 30-hour battery life, you can enjoy uninterrupted listening throughout your day.
+                        </p>
+                        <p class="text-gray-600">
+                            Crafted with premium materials including genuine leather ear cushions and a lightweight yet durable frame, these headphones provide all-day comfort without compromising on style or performance.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Specifications</h3>
+                    <dl class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">Driver Size:</dt>
+                            <dd class="text-gray-900">40mm</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">Frequency Response:</dt>
+                            <dd class="text-gray-900">20Hz - 40kHz</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">Impedance:</dt>
+                            <dd class="text-gray-900">32Ω</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">Weight:</dt>
+                            <dd class="text-gray-900">250g</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">Connectivity:</dt>
+                            <dd class="text-gray-900">Bluetooth 5.0</dd>
+                        </div>
+                        <div class="flex justify-between">
+                            <dt class="text-gray-600">Charging:</dt>
+                            <dd class="text-gray-900">USB-C</dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let quantity = 1;
+        let cartCount = 0;
+
+        // Quantity controls
+        document.getElementById('decrease-qty').addEventListener('click', function() {
+            if (quantity > 1) {
+                quantity--;
+                document.getElementById('quantity').textContent = quantity;
+                updateAddToCartButton();
+            }
+        });
+
+        document.getElementById('increase-qty').addEventListener('click', function() {
+            if (quantity < 10) {
+                quantity++;
+                document.getElementById('quantity').textContent = quantity;
+                updateAddToCartButton();
+            }
+        });
+
+        // Update add to cart button price
+        function updateAddToCartButton() {
+            const price = (299.99 * quantity).toFixed(2);
+            document.getElementById('add-to-cart').textContent = `Add to Cart - $${price}`;
+        }
+
+        // Add to cart functionality
+        document.getElementById('add-to-cart').addEventListener('click', function() {
+            cartCount += quantity;
+            document.getElementById('cart-count').textContent = cartCount;
+            
+            // Add animation
+            this.classList.add('cart-animation');
+            setTimeout(() => {
+                this.classList.remove('cart-animation');
+            }, 600);
+
+            // Show notification
+            const notification = document.getElementById('notification');
+            notification.classList.remove('hidden');
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        });
+
+        // Color selection
+        const colorButtons = document.querySelectorAll('div:nth-child(7) button');
+        colorButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove border from all buttons
+                colorButtons.forEach(btn => {
+                    btn.classList.remove('border-blue-500');
+                    btn.classList.add('border-transparent');
+                });
+                // Add border to clicked button
+                this.classList.remove('border-transparent');
+                this.classList.add('border-blue-500');
+            });
+        });
+
+        // Thumbnail image selection
+        const thumbnails = document.querySelectorAll('.grid-cols-4 > div');
+        thumbnails.forEach((thumb, index) => {
+            thumb.addEventListener('click', function() {
+                // Remove active state from all thumbnails
+                thumbnails.forEach(t => {
+                    t.classList.remove('border-blue-500');
+                    t.classList.add('border-transparent');
+                });
+                // Add active state to clicked thumbnail
+                this.classList.remove('border-transparent');
+                this.classList.add('border-blue-500');
+                
+                // Update main image color based on selection
+                const mainImage = document.getElementById('main-image').querySelector('svg');
+                const colors = ['#1f2937', '#3b82f6', '#dc2626', '#059669'];
+                mainImage.style.color = colors[index];
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984d4f7a272f0254',t:'MTc1ODgzMjU1Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
